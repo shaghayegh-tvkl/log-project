@@ -1,0 +1,103 @@
+---
+- name: Install Docker
+  hosts:
+    - manager
+    - servers
+  remote_user: root
+  tasks:
+    - name: Install Docker on CentOS 7
+      include: ./docker/centos.yml
+      when: (ansible_facts['distribution'] == "CentOS")
+
+    - name: Install Docker on Ubuntu
+      include: ./docker/ubuntu.yml
+      when: (ansible_facts['distribution'] == "Ubuntu")
+
+  handlers:
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
+
+# ------------------------------------------------------------------------------
+
+- name: Build Docker Swarm Cluster
+  hosts:
+    - manager
+    - servers
+  remote_user: root
+  tasks:
+    - name: Setup a Docker Swarm Manager
+      include: ./dockerswarm/manager.yml
+      when: "'manager' in group_names"
+    - name: Register dummy host with Token Variable
+      add_host:
+        name: "DUMMY_HOST"
+        TOKEN: "{{SWARM['swarm_facts']['JoinTokens']['Manager']}}"
+      when: "'manager' in group_names"
+
+    - name: Setup a Docker Swarm Worker
+      include: ./dockerswarm/worker.yml
+      when: "'servers' in group_names"
+
+# ------------------------------------------------------------------------------
+
+- name: Install Nginx on manager
+  hosts:
+    - manager
+  remote_user: root
+  tasks:
+    - name: Install Nginx on Ubuntu
+      include: ./nginx/install.yml
+      when: (ansible_facts['distribution'] == "Ubuntu")
+    
+    - name: Create Keys and Passwords for Nginx on Ubuntu
+      include: ./nginx/auth.yml
+      when: (ansible_facts['distribution'] == "Ubuntu")
+    
+    - name: Configure Nginx  
+      include: ./nginx/config.yml
+      when: (ansible_facts['distribution'] == "Ubuntu")
+    
+  handlers:
+    - name: Start Nginx
+      service:
+        name: nginx
+        state: started
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+#------------------------------------------------------------------------------
+
+- name: Build Docker Images
+  hosts:
+    - manager
+  remote_user: root
+  tasks:
+    - name: Copy Files
+      copy:
+        src: /home/ubuntu/ansible-project/app/files/
+        dest: /home/ubuntu/log-docker 
+
+    - name: Create Log Docker Image 
+      include: ./app/log.yml
+   
+    - name: Create Redis Docker Image 
+      include: ./app/redis.yml
+
+    - name: Create Chart Docker Image 
+      include: ./app/chart.yml
+
+    - name: Create Docker Swarm stack
+      include: ./app/stack.yml 
+   
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+
+...

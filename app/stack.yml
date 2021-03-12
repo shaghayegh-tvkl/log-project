@@ -1,0 +1,29 @@
+- name: Install pip
+  package:
+    name: python-pip
+    update_cache: yes
+    state: present
+- name: Install python-setuptools
+  package:
+    name: python-setuptools
+    update_cache: yes
+    state: present
+- name: Install jsondiff
+  pip:
+    name: jsondiff
+    state: present
+- name: Install pyyaml
+  pip:
+    name: pyyaml
+    state: present
+- name: Log into DockerHub
+  docker_login:
+    username: shaghayeghtvkl
+    password: Sh.Tv!=)13771377
+   
+- name: Deploy stack from a compose file
+  community.docker.docker_stack:
+    state: present
+    name: logstack
+    compose:
+      - /home/ubuntu/log-docker/docker-compose.yml

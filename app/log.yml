@@ -1,0 +1,21 @@
+- name: Log into DockerHub
+  docker_login:
+    username: shaghayeghtvkl
+    password: Sh.Tv!=)13771377
+  register: RESULTS
+
+
+- name: Build The Log Image
+  community.docker.docker_image:
+    build:
+      path: /home/ubuntu/log-docker/log/
+    name: shaghayegh-log
+    tag: "1.0"
+    source: build
+
+- name: Tag and Push Log To DockerHub
+  docker_image:
+    name: shaghayegh-log
+    repository: shaghayeghtvkl/shaghayegh-log
+    tag: "1.0"
+    push: yes

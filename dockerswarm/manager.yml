@@ -1,0 +1,23 @@
+- name: Install epel-release
+  yum:
+    name: "epel-release"
+    state: latest
+  when: (ansible_facts['distribution'] == "CentOS")
+- name: Install pip
+  package:
+    name: python-pip
+    update_cache: yes
+    state: present
+- name: Install python-setuptools
+  package:
+    name: python-setuptools
+    update_cache: yes
+    state: present
+- name: Install docker-py
+  pip:
+    name: docker-py
+    state: present
+- name: Init a new swarm with default parameters
+  community.docker.docker_swarm:
+    state: present
+  register: SWARM

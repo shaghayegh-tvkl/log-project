@@ -1,0 +1,22 @@
+- name: "create www directory"
+  file:
+    path: /var/www/37.152.187.31
+    state: directory
+    mode: "0775"
+    owner: "root"
+    group: "root"
+
+- name: delete default nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: copy nginx site.conf
+  template:
+    src: ./config/site.conf.j2
+    dest: /etc/nginx/sites-enabled/37.152.187.31
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Nginx
+
