@@ -77,7 +77,8 @@
     - name: Copy Files
       copy:
         src: /home/ubuntu/log-project/app/files
-        dest: /home/ubuntu/log-docker 
+        dest: /home/ubuntu/log-docker
+         
 
     - name: Create Log Docker Image 
       include: ./app/log.yml

@@ -26,4 +26,4 @@
     state: present
     name: logstack
     compose:
-      - /home/ubuntu/log-docker/docker-compose.yml
+      - /home/ubuntu/log-docker/files/docker-compose.yml

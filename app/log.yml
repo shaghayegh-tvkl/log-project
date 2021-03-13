@@ -8,7 +8,7 @@
 - name: Build The Log Image
   community.docker.docker_image:
     build:
-      path: /home/ubuntu/log-docker/log/
+      path: /home/ubuntu/log-docker/files/log/
     name: shaghayegh-log
     tag: "1.0"
     source: build
