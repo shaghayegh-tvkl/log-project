@@ -16,15 +16,15 @@
   pip:
     name: pyyaml
     state: present
-
 - name: Log into DockerHub
   docker_login:
     username: 
     password: 
-   
 - name: Deploy stack from a compose file
   community.docker.docker_stack:
     state: present
     name: logstack
     compose:
       - /home/ubuntu/log-docker/files/docker-compose.yml
+
+
