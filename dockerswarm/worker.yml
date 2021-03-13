@@ -20,5 +20,5 @@
 - name: Add nodes
   community.docker.docker_swarm:
     state: join
-    join_token: "{{hostvars['DUMMY_HOST']['TOKEN']}}"
-    remote_addrs: [ 'dispatcher:2377' ]
+    join_token: "{{hostvars['DUMMY_HOST_TWO']['TOKEN']}}"
+    remote_addrs: [ 'log-manager:2377' ]

@@ -1,23 +1,23 @@
 ---
-- name: Install Docker
-  hosts:
-    - managerLog
-    - serversLog
-  remote_user: root
-  tasks:
-    - name: Install Docker on CentOS 7
-      include: ./docker/centos.yml
-      when: (ansible_facts['distribution'] == "CentOS")
+# - name: Install Docker
+#   hosts:
+#     - managerLog
+#     - serversLog
+#   remote_user: root
+#   tasks:
+#     - name: Install Docker on CentOS 7
+#       include: ./docker/centos.yml
+#       when: (ansible_facts['distribution'] == "CentOS")
 
-    - name: Install Docker on Ubuntu
-      include: ./docker/ubuntu.yml
-      when: (ansible_facts['distribution'] == "Ubuntu")
+#     - name: Install Docker on Ubuntu
+#       include: ./docker/ubuntu.yml
+#       when: (ansible_facts['distribution'] == "Ubuntu")
 
-  handlers:
-    - name: restart docker
-      service:
-        name: docker
-        state: restarted
+#   handlers:
+#     - name: restart docker
+#       service:
+#         name: docker
+#         state: restarted
 
 # ------------------------------------------------------------------------------
 
@@ -30,9 +30,10 @@
     - name: Setup a Docker Swarm Manager
       include: ./dockerswarm/manager.yml
       when: "'managerLog' in group_names"
+
     - name: Register dummy host with Token Variable
       add_host:
-        name: "DUMMY_HOST"
+        name: "DUMMY_HOST_TWO"
         TOKEN: "{{SWARM['swarm_facts']['JoinTokens']['Manager']}}"
       when: "'managerLog' in group_names"
 
@@ -47,9 +48,9 @@
     - managerLog
   remote_user: root
   tasks:
-    - name: Install Nginx on Ubuntu
-      include: ./nginx/install.yml
-      when: (ansible_facts['distribution'] == "Ubuntu")
+    # - name: Install Nginx on Ubuntu
+    #   include: ./nginx/install.yml
+    #   when: (ansible_facts['distribution'] == "Ubuntu")
 
     - name: Configure Nginx  
       include: ./nginx/config.yml
