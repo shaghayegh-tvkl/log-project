@@ -27,7 +27,7 @@ try:
                         server_errors += 1
                         # print(status)
 
-    print("Start Date: " + str(sys.argv[1]) + " - End Date:  "+ str(sys.argv[1]) + ":  2xx: "+ str(successful_responses) + " **  4xx: " + str(client_errors) + " **  5xx: " + str(server_errors))
+    print("Start Date: " + str(sys.argv[1]) + " - End Date:  "+ str(sys.argv[2]) + ":  2xx: "+ str(successful_responses) + " -----  4xx: " + str(client_errors) + " -----  5xx: " + str(server_errors))
                 
 except Exception as e:
     print("An exception occurred: ", e) 
