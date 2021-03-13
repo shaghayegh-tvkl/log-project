@@ -1,21 +1,21 @@
-- name: Install pip
-  package:
-    name: python-pip
-    update_cache: yes
-    state: present
-- name: Install python-setuptools
-  package:
-    name: python-setuptools
-    update_cache: yes
-    state: present
-- name: Install jsondiff
-  pip:
-    name: jsondiff
-    state: present
-- name: Install pyyaml
-  pip:
-    name: pyyaml
-    state: present
+# - name: Install pip
+#   package:
+#     name: python-pip
+#     update_cache: yes
+#     state: present
+# - name: Install python-setuptools
+#   package:
+#     name: python-setuptools
+#     update_cache: yes
+#     state: present
+# - name: Install jsondiff
+#   pip:
+#     name: jsondiff
+#     state: present
+# - name: Install pyyaml
+#   pip:
+#     name: pyyaml
+#     state: present
 - name: Log into DockerHub
   docker_login:
     username: shaghayeghtvkl

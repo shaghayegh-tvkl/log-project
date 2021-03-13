@@ -21,31 +21,31 @@
 
 # ------------------------------------------------------------------------------
 
-- name: Build Docker Swarm Cluster
-  hosts:
-    - managerLog
-    - serversLog
-  remote_user: root
-  tasks:
-    - name: Setup a Docker Swarm Manager
-      include: ./dockerswarm/manager.yml
-      when: "'managerLog' in group_names"
+# - name: Build Docker Swarm Cluster
+#   hosts:
+#     - managerLog
+#     - serversLog
+#   remote_user: root
+#   tasks:
+#     - name: Setup a Docker Swarm Manager
+#       include: ./dockerswarm/manager.yml
+#       when: "'managerLog' in group_names"
 
-    - name: Register dummy host with Token Variable
-      add_host:
-        name: "DUMMY_HOST_TWO"
-        TOKEN: "{{SWARM['swarm_facts']['JoinTokens']['Manager']}}"
-      when: "'managerLog' in group_names"
+#     - name: Register dummy host with Token Variable
+#       add_host:
+#         name: "DUMMY_HOST_TWO"
+#         TOKEN: "{{SWARM['swarm_facts']['JoinTokens']['Manager']}}"
+#       when: "'managerLog' in group_names"
 
-    - name: Setup a Docker Swarm Worker
-      include: ./dockerswarm/worker.yml
-      when: "'serversLog' in group_names"
+#     - name: Setup a Docker Swarm Worker
+#       include: ./dockerswarm/worker.yml
+#       when: "'serversLog' in group_names"
 
 # ------------------------------------------------------------------------------
 
 - name: Install Nginx on manager
   hosts:
-    - managerLog
+    - manager
   remote_user: root
   tasks:
     # - name: Install Nginx on Ubuntu
@@ -71,14 +71,14 @@
 
 - name: Build Docker Images
   hosts:
-    - managerLog
+    - manager
   remote_user: root
   tasks:
     - name: Copy Files
       copy:
         src: /home/ubuntu/log-project/app/files
         dest: /home/ubuntu/log-docker
-         
+
 
     - name: Create Log Docker Image 
       include: ./app/log.yml
