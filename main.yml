@@ -89,8 +89,8 @@
     # - name: Create Chart Docker Image 
     #   include: ./app/chart.yml
 
-    # - name: Create Docker Swarm stack
-    #   include: ./app/stack.yml 
+    - name: Create Docker Swarm stack
+      include: ./app/stack.yml 
    
     # - name: Restart Nginx
     #   service:
