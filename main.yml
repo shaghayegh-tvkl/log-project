@@ -80,8 +80,8 @@
         dest: /home/ubuntu/log-docker
 
 
-    # - name: Create Log Docker Image 
-    #   include: ./app/log.yml
+    - name: Create Log Docker Image 
+      include: ./app/log.yml
    
     # - name: Create Redis Docker Image 
     #   include: ./app/redis.yml
