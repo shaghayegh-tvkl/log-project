@@ -1,5 +1,5 @@
 const express = require('express');
-const {spawn} = require('child_process');
+const { spawn } = require('child_process');
 const app = express();
 const ip = "0.0.0.0";
 const port = 5000;
@@ -10,7 +10,13 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/log', (req, res) => {
+app.use(function (req, res, next) {
+    res.setTimeout(500000, function () {
+        // call back function is called when request timed out.
+    });
+    next();
+}).get('/log', (req, res) => {
+
     var startDate = req.query.startDate
     var endDate = req.query.endDate
 

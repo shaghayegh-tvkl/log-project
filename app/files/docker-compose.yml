@@ -1,75 +1,31 @@
 version: '3.3'
 
 services:
-  db:
-    image: mysql:5.7
-    volumes:
-      - db_data:/var/lib/mysql
+  redis:
+    image: shaghayeghtvkl/shaghayegh-redis:1.0
+    ports:
+      - "8005:6379"
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: somewordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
     deploy:
       placement:
-        constraints: [node.hostname == server-1] 
+        constraints: [node.hostname == server-2]
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+  # chart:
+  #   depends_on:
+  #     - redis
+  #   image: shaghayeghtvkl/shaghayegh-chart:1.0
+  #   ports:
+  #     - "8004:80"
+  #   restart: always
+  #   deploy:
+  #     placement:
+  #       constraints: [node.hostname == server-2]
+
+  log:
+    image: shaghayeghtvkl/shaghayegh-log:1.0
     ports:
-      - "8080:80"
-    links:
-      - db:mysql
+      - "8006:5000"
+    restart: always
     deploy:
       placement:
         constraints: [node.hostname == server-1]
-
-  wordpress:
-    depends_on:
-      - db
-    image: shaghayeghtvkl/shaghayegh-wordpress:1.0
-    volumes:
-      - wp_data:/var/www/html
-    ports:
-      - "8002:80"
-    restart: always
-    environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-      WORDPRESS_DB_NAME: wordpress
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints: #[node.hostname == server-3]
-          - node.hostname != dispatcher
-          - node.hostname != server-3
-          - node.hostname != server-4.novalocal
-
-  mag:
-    image: shaghayeghtvkl/shaghayegh-mag:1.0
-    ports:
-      - "8003:5000"
-    restart: always
-    deploy:
-      placement:
-        constraints: [node.hostname == server-3]
-
-  blog:
-    image: shaghayeghtvkl/shaghayegh-blog:1.0
-    ports:
-      - "8004:5000"
-    restart: always
-    deploy:
-      placement:
-        constraints: [node.hostname == server-4.novalocal]
-        
-volumes:
-    db_data:
-    wp_data:
-      driver_opts:
-        type: "nfs"
-        o: "addr=192.168.72.27,nolock,soft,rw"
-        device: ":/mnt/nfs_share"
