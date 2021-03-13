@@ -69,19 +69,19 @@
 
 #------------------------------------------------------------------------------
 
-- name: Build Docker Images
-  hosts:
-    - manager
-  remote_user: root
-  tasks:
-    - name: Copy Files
-      copy:
-        src: /home/ubuntu/log-project/app/files
-        dest: /home/ubuntu/log-docker
+# - name: Build Docker Images
+#   hosts:
+#     - manager
+#   remote_user: root
+#   tasks:
+#     - name: Copy Files
+#       copy:
+#         src: /home/ubuntu/log-project/app/files
+#         dest: /home/ubuntu/log-docker
 
 
-    - name: Create Log Docker Image 
-      include: ./app/log.yml
+#     - name: Create Log Docker Image 
+#       include: ./app/log.yml
    
     # - name: Create Redis Docker Image 
     #   include: ./app/redis.yml
@@ -89,11 +89,11 @@
     # - name: Create Chart Docker Image 
     #   include: ./app/chart.yml
 
-    - name: Create Docker Swarm stack
-      include: ./app/stack.yml 
+    # - name: Create Docker Swarm stack
+    #   include: ./app/stack.yml 
    
-    - name: Restart Nginx
-      service:
-        name: nginx
-        state: restarted
+    # - name: Restart Nginx
+    #   service:
+    #     name: nginx
+    #     state: restarted
 ...
