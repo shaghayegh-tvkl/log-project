@@ -10,16 +10,15 @@ services:
       placement:
         constraints: [node.hostname == server-2]
 
-  # chart:
-  #   depends_on:
-  #     - redis
-  #   image: shaghayeghtvkl/shaghayegh-chart:1.0
-  #   ports:
-  #     - "8004:80"
-  #   restart: always
-  #   deploy:
-  #     placement:
-  #       constraints: [node.hostname == server-2]
+  chart:
+    depends_on:
+      - redis
+    image: shaghayeghtvkl/shaghayegh-chart:1.0
+    network: host
+    restart: always
+    deploy:
+      placement:
+        constraints: [node.hostname == server-2]
 
   log:
     image: shaghayeghtvkl/shaghayegh-log:1.0
